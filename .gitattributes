@@ -1,1 +1,26 @@
 * text=auto !eol
+/:wn -text
+/ACKNOWLEDGEMENTS -text
+/AUTHORS -text
+/COPYING -text
+/ChangeLog -text
+/INSTALL -text
+/Makefile.am -text
+/NEWS -text
+/README -text
+/apertium-tur-fin.fin-tur.lrx -text
+/apertium-tur-fin.fin-tur.t1x -text
+/apertium-tur-fin.fin-tur.t2x -text
+/apertium-tur-fin.fin-tur.t3x -text
+/apertium-tur-fin.tur-fin.dix -text
+/apertium-tur-fin.tur-fin.lrx -text
+/apertium-tur-fin.tur-fin.t1x -text
+/apertium-tur-fin.tur-fin.t2x -text
+/apertium-tur-fin.tur-fin.t3x -text
+/autogen.sh -text
+/configure.ac -text
+/fin-tur.prob -text svneol=unset#unset
+/modes.xml -text
+texts/tarina.fin.text -text
+texts/undhr.fin.text -text
+/tur-fin.prob -text svneol=unset#unset
