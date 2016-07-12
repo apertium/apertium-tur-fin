@@ -77,7 +77,6 @@
             </lu>
           </chunk>
         </out>
-        <let><var n="sent-qst"/><lit v=""/></let>
       </action>
     </rule>
 

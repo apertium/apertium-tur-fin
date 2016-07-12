@@ -11,21 +11,19 @@ PREFIX2=$(LANG2)-$(LANG1)
 BASENAME=apertium-$(PREFIX1)
 
 TARGETS_COMMON =		\
-	$(PREFIX1).automorf.bin	\
-	$(PREFIX1).prob		\
+	$(PREFIX1).automorf.hfst	\
 	$(PREFIX1).rlx.bin	\
 	$(PREFIX1).autobil.bin	\
 	$(PREFIX1).autolex.bin	\
-	$(PREFIX1).autogen.bin	\
+	$(PREFIX1).autogen.hfst	\
 	$(PREFIX1).t1x.bin	\
 	$(PREFIX1).t2x.bin	\
 	$(PREFIX1).t3x.bin	\
-	$(PREFIX2).automorf.bin	\
-	$(PREFIX2).prob		\
+	$(PREFIX2).automorf.hfst	\
 	$(PREFIX2).rlx.bin	\
 	$(PREFIX2).autobil.bin	\
 	$(PREFIX2).autolex.bin	\
-	$(PREFIX2).autogen.bin	\
+	$(PREFIX2).autogen.hfst	\
 	$(PREFIX2).t1x.bin	\
 	$(PREFIX2).t2x.bin	\
 	$(PREFIX2).t3x.bin
@@ -48,24 +46,22 @@ TARGETS_COMMON =		\
 	echo " ?* " | hfst-regexp2fst > .deps/any-symbol.hfst
 	hfst-concatenate -1 .deps/$(PREFIX1).autobil.upper -2 .deps/any-symbol.hfst -o .deps/$(PREFIX1).autobil.prefixes
 
-.deps/$(LANG1).automorf.hfst: $(AP_SRC1)/$(LANG1).automorf.att.gz .deps/.d
-	$(ZCAT) $< | hfst-txt2fst > $@
+.deps/$(LANG1).automorf.hfst: $(AP_SRC1)/$(LANG1).automorf.hfst .deps/.d
+	hfst-fst2fst -f openfst -v $< -o $@
 
 .deps/$(LANG1).automorf.bin: $(AP_SRC1)/$(LANG1).automorf.att.gz .deps/.d
 	@$(ZCAT) $< > $@.att
 	lt-comp lr $@.att $@
 	@rm $@.att
 
-$(PREFIX1).automorf.bin: .deps/$(LANG1).automorf.hfst .deps/$(PREFIX1).autobil.prefixes
-	hfst-compose-intersect -1 .deps/$(LANG1).automorf.hfst -2 .deps/$(PREFIX1).autobil.prefixes -o .deps/$(PREFIX1).automorf.trimmed
-	hfst-fst2txt -i .deps/$(PREFIX1).automorf.trimmed -o .deps/$(PREFIX1).automorf.trimmed.att
-	lt-comp lr .deps/$(PREFIX1).automorf.trimmed.att $@
+$(PREFIX1).automorf.hfst: .deps/$(LANG1).automorf.hfst 
+	hfst-fst2fst -f olw -v $< -o $@
 
 # -------------------
 # {{languageName1}} generation:
 # ---------------------
 $(PREFIX2).autogen.hfst: $(AP_SRC1)/$(LANG1).autogen.hfst
-	cp $< $@
+	hfst-fst2fst -f olw $< -o $@
 
 $(PREFIX2).autogen.bin: $(AP_SRC1)/$(LANG1).autogen.bin
 	cp $< $@
@@ -80,25 +76,22 @@ $(PREFIX2).autogen.bin: $(AP_SRC1)/$(LANG1).autogen.bin
 	echo " ?* " | hfst-regexp2fst > .deps/any-symbol.hfst
 	hfst-concatenate -1 .deps/$(PREFIX2).autobil.upper -2 .deps/any-symbol.hfst -o .deps/$(PREFIX2).autobil.prefixes
 
-.deps/$(LANG2).automorf.hfst: $(AP_SRC2)/$(LANG2).automorf.att.gz .deps/.d
-	$(ZCAT) $< | hfst-txt2fst > $@
+.deps/$(LANG2).automorf.hfst: $(AP_SRC2)/analyser-gt-desc.hfstol .deps/.d
+	hfst-fst2fst -f openfst $< -o $@
 
 .deps/$(LANG2).automorf.bin: $(AP_SRC2)/$(LANG2).automorf.att.gz .deps/.d
 	@$(ZCAT) $< > $@.att
 	lt-comp lr $@.att $@
 	@rm $@.att
 
-$(PREFIX2).automorf.bin: .deps/$(LANG2).automorf.hfst .deps/$(PREFIX2).autobil.prefixes
-	hfst-compose-intersect -1 .deps/$(LANG2).automorf.hfst -2 .deps/$(PREFIX2).autobil.prefixes -o .deps/$(PREFIX2).automorf.trimmed
-	hfst-fst2txt -i .deps/$(PREFIX2).automorf.trimmed -o .deps/$(PREFIX2).automorf.trimmed.att
-	lt-comp lr .deps/$(PREFIX2).automorf.trimmed.att $@
-
+$(PREFIX2).automorf.hfst: .deps/$(LANG2).automorf.hfst
+	hfst-fst2fst -f olw $< -o $@
 
 # -------------------
 # {{languageName2}} generation:
 # ---------------------
-$(PREFIX1).autogen.hfst: $(AP_SRC2)/$(LANG2).autogen.hfst
-	cp $< $@
+$(PREFIX1).autogen.hfst: $(AP_SRC2)/generator-gt-desc.hfstol
+	hfst-fst2fst -f olw -v $< -o $@
 
 $(PREFIX1).autogen.bin: $(AP_SRC2)/$(LANG2).autogen.bin
 	cp $< $@
@@ -120,8 +113,8 @@ $(PREFIX2).prob: $(AP_SRC2)/$(LANG2).prob
 $(PREFIX1).rlx.bin: $(AP_SRC1)/apertium-$(LANG1).$(LANG1).rlx
 	cg-comp $< $@
 
-$(PREFIX2).rlx.bin: $(AP_SRC2)/apertium-$(LANG2).$(LANG2).rlx
-	cg-comp $< $@
+$(PREFIX2).rlx.bin: $(AP_SRC2)/$(LANG2).mor.rlx.bin
+	cp -v $< $@
 
 ###############################################################################
 ## Bilingual dictionaries
@@ -218,8 +211,8 @@ apertium_tur_fin_DATA=	\
 
 # All modes are created by the same goal, listing several will just give problems with make -j2
 noinst_DATA=modes/$(PREFIX1).mode \
-	.deps/$(LANG1).automorf.bin \
-	.deps/$(LANG2).automorf.bin
+	.deps/$(LANG1).automorf.hfst \
+	.deps/$(LANG2).automorf.hfst
 
 install-data-local: install-modes
 
