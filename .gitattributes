@@ -19,8 +19,12 @@
 /apertium-tur-fin.tur-fin.t3x -text
 /autogen.sh -text
 /configure.ac -text
+dev/punctuation.lexc -text
 /fin-tur.prob -text svneol=unset#unset
 /modes.xml -text
+texts/story.tur.1.txt -text
+texts/story.tur.2.txt -text
+texts/story.tur.txt -text
 texts/tarina.fin.text -text
 texts/undhr.fin.text -text
 /tur-fin.prob -text svneol=unset#unset
