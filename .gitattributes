@@ -28,3 +28,8 @@ texts/story.tur.txt -text
 texts/tarina.fin.text -text
 texts/undhr.fin.text -text
 /tur-fin.prob -text svneol=unset#unset
+*.dix linguist-language=XML linguist-detectable=true
+*.lrx linguist-language=XML linguist-detectable=true
+*.lsx linguist-language=XML linguist-detectable=true
+*.tsx linguist-language=XML linguist-detectable=true
+*.t[[:digit:]]x linguist-language=XML linguist-detectable=true
