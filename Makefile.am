@@ -239,10 +239,10 @@ test: all
 
 # fin->est mor
 # apertium-fin-est.fin-est.LR.att.gz
-# .deps/$(LANG1).automorf-missingpunct.hfst: $(AP_SRC1)/apertium-und.$(LANG1)-und.LR.att.gz .deps/.d
-# 	$(ZCAT) $< | hfst-txt2fst > $@
-.deps/$(LANG2).automorf-missingpunct.hfst: $(AP_SRC2)/apertium-fin-est.$(LANG2)-est.LR.att.gz .deps/.d
+.deps/$(LANG2).automorf-missingpunct.hfst: $(AP_SRC2)/apertium-und.$(LANG2)-und.LR.att.gz .deps/.d
 	$(ZCAT) $< | hfst-txt2fst > $@
+#.deps/$(LANG2).automorf-missingpunct.hfst: $(AP_SRC2)/apertium-fin-est.$(LANG2)-est.LR.att.gz .deps/.d
+#	$(ZCAT) $< | hfst-txt2fst > $@
 
 .deps/$(LANG2).automorf.hfst: .deps/$(LANG2).automorf-missingpunct.hfst .deps/punctuation.LR.hfst
 	hfst-union -1 $< -2 .deps/punctuation.LR.hfst -o $@
@@ -261,7 +261,7 @@ $(PREFIX2).automorf-untrimmed.hfst: .deps/$(LANG2).automorf.hfst
 .deps/$(PREFIX1).autogen.hfst: $(AP_SRC2)/apertium-$(LANG2).$(LANG2).RL.att.gz .deps/punctuation.RL.hfst .deps/.d
 	$(ZCAT) $< | hfst-txt2fst | hfst-union -2 .deps/punctuation.RL.hfst -o $@
 
-$(PREFIX2).autogen.hfst: .deps/$(PREFIX2).autogen.hfst
+$(PREFIX1).autogen.hfst: .deps/$(PREFIX1).autogen.hfst
 	hfst-fst2fst -O $< -o $@
 
 
